@@ -15,6 +15,7 @@ class SearchPage  extends BasePage {
         this.searchInsideModal = page.locator('hive-searchinput');
         this.checkBoxInput = page.locator('checkbox-input');
         this.applyBtn = page.getByRole('button', { name: 'Apply' });
+        this.noResultsMessage = page.locator('p', { hasText: 'No results found' });
 }
 
     async searchForProperty(keyword){

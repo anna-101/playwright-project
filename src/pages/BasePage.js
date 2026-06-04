@@ -26,5 +26,12 @@ class BasePage {
      async getElementsCount(locator){
         return await locator.count();
     }
+
+    async clickOptionByText(locator, text){
+
+        await locator
+            .filter({ hasText: text })
+            .click();
+    }
 }
 module.exports = BasePage;

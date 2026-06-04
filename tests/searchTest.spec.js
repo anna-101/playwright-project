@@ -1,6 +1,8 @@
 import {test, expect} from '@playwright/test';
+import { allure } from 'allure-playwright';
 const searchPage = require('../pageObjects/searchPage');
 const SearchApi = require('../api/SearchApi');
+
 
 let searchPage;
 let searchapi
@@ -27,7 +29,7 @@ test('search Condo Property',async({page})=>{
 test('Verify No Search results for invalid keyword',async({page, request})=>{
         const searchKeyword = 'InvalidSearchKeyword';
         
-        const searchResponsePromise = searchapi.searchProperty(searchKeyword);
+        const searchResponsePromise = searchapi.getSearchItems(searchKeyword);
 
         await searchPage.searchForProperty(searchKeyword);
 
@@ -60,5 +62,23 @@ test('Verify No Search results for invalid keyword',async({page, request})=>{
         await searchPage.searchByArea("Bedok");
          await expect(await searchpage.getPropertyCardsCount()).toBeGreaterThan(1);
     })
+
+    test('Pagination Validation', async ({ page, request }) => {
+
+        const listingApi = new ListingApi(request);
+
+        const page2Data = await listingApi.getListings(2);
+
+        const apiFirstProperty = page2Data.results[0].title;
+
+        await listingPage.nextPage();
+
+        const uiFirstProperty = await listingPage.getFirstProperty();
+
+        expect(uiFirstProperty)
+.toContain(apiFirstProperty);
+});
+
+
 
    
